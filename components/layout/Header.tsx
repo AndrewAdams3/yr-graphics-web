@@ -6,6 +6,11 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useRouter } from 'next/router'
 
+import configureAmp from '../../lib/amp'
+import { signin, signout, signup } from '../../lib/auth'
+
+configureAmp()
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -64,7 +69,9 @@ export default function Header() {
           </span>
           <span className={classes.rightButtons}>
             <Button>Get Involved?</Button>
-            <Button variant="outlined" className={classes.authButton}>Sign In</Button>
+            <Button onClick={() => signin("andydrew313@gmail.com", "Anda31399pand@")} variant="outlined" className={classes.authButton}>Sign In</Button>
+            <Button onClick={signout} variant="outlined" className={classes.authButton}>Sign Out</Button>
+            <Button onClick={() => signup("andydrew313@gmail.com", "Anda31399pand@")} variant="outlined" className={classes.authButton}>Sign Up</Button>
           </span>
         </Toolbar>
       </AppBar>

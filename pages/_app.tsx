@@ -10,6 +10,9 @@ import { getTheme } from '../theme/theme'
 
 import '../theme/global.css'
 
+import configureAmp from '../lib/amp'
+configureAmp()
+
 function MyApp({ Component, pageProps }) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [darkMode, setDarkMode] = useState(prefersDarkMode)
