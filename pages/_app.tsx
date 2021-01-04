@@ -3,15 +3,15 @@ import { ThemeProvider, useMediaQuery } from '@material-ui/core'
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Layout from '../components/layout'
-
 import { LayoutProvider } from '../lib/LayoutContext'
-
 import { getTheme } from '../theme/theme'
 
 import '../theme/global.css'
 
 import configureAmp from '../lib/amp'
-configureAmp()
+import Amplify from 'aws-amplify';
+
+Amplify.configure({ ...configureAmp, ssr: true })
 
 function MyApp({ Component, pageProps }) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');

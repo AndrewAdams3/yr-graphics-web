@@ -1,5 +1,4 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import absoluteUrl from 'next-absolute-url'
 import React from 'react'
 import { IProduct } from '../../../types'
 
@@ -16,9 +15,7 @@ export default function ShopCause({ data }: InferGetServerSidePropsType<typeof g
 
 export const getServerSideProps: GetServerSideProps = async ({ query, params, req }) => {
   const { cause } = params
-  const { host, origin } = absoluteUrl(req)
-  console.log("host", host, origin)
-  const data: Data = await (await fetch(`${origin}/api/cause?cause=${cause}`)).json()
+  const data = await (await fetch("https://7o58c12lu4.execute-api.us-west-2.amazonaws.com/dev/products/cause/" + cause)).json()
   return {
     props: {
       data: data

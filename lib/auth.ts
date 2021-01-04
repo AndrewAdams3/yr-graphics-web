@@ -1,9 +1,14 @@
-import Auth from "@aws-amplify/auth"
+import {Auth} from "aws-amplify"
 
-export const signin = async (username: string, pass: string): Promise<boolean> => {
+type userAuthParams = {
+  username: string,
+  pass: string
+  auth?: any
+}
+export const signin = async ({username, pass, auth = Auth}): Promise<boolean> => {
   try {
-    if(isLoggedIn) signout();
-    const user = await Auth.signIn({
+    if(isLoggedIn(auth)) signout();
+    const user = await auth.signIn({
       password: pass,
       username: username,
     })
@@ -14,9 +19,11 @@ export const signin = async (username: string, pass: string): Promise<boolean> =
   }
 }
 
-export const isLoggedIn = async (): Promise<boolean> => {
+export const isLoggedIn = async (auth): Promise<boolean> => {
   try {
-    await Auth.currentAuthenticatedUser()
+    console.log("checking logged in")
+    const user = await auth.currentAuthenticatedUser()
+    console.log("logged in", user)
     return true;
   } catch(err) {
     console.log("not logged in")
@@ -24,10 +31,10 @@ export const isLoggedIn = async (): Promise<boolean> => {
   }
 }
 
-export const signup = async (username: string, pass: string): Promise<boolean> => {
+export const signup = async ({username, pass, auth = Auth}: userAuthParams): Promise<boolean> => {
   try {
-    if(isLoggedIn) signout();
-    await Auth.signUp({
+    if(isLoggedIn(auth)) signout();
+    await auth.signUp({
       password: pass,
       username: username,
       attributes: {}
@@ -39,9 +46,9 @@ export const signup = async (username: string, pass: string): Promise<boolean> =
   }
 }
 
-export const signout = async (): Promise<boolean> => {
+export const signout = async (auth = Auth): Promise<boolean> => {
   try {
-    await Auth.signOut()
+    await auth.signOut()
     return true
   } catch (err) {
     console.log("error signing out", err)
