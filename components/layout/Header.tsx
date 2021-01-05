@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -6,11 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useRouter } from 'next/router'
 import Amplify from 'aws-amplify'
+import awsExports from '@/lib/amp'
 
-import amplifyConfig from '../../lib/amp'
-import { signin, signout, signup } from '../../lib/auth'
-
-Amplify.configure({ ...amplifyConfig, ssr: true })
+import { signIn, signOut } from '@/lib/auth'
+Amplify.configure({ ...awsExports, ssr: true });
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,9 +70,8 @@ export default function Header() {
           </span>
           <span className={classes.rightButtons}>
             <Button>Get Involved?</Button>
-            <Button onClick={() => signin({ username: "andydrew313@gmail.com", pass: "Anda31399pand@" })} variant="outlined" className={classes.authButton}>Sign In</Button>
-            <Button onClick={() => signout()} variant="outlined" className={classes.authButton}>Sign Out</Button>
-            <Button onClick={() => signup({ username: "andydrew313@gmail.com", pass: "Anda31399pand@" })} variant="outlined" className={classes.authButton}>Sign Up</Button>
+            <Button onClick={() => signIn({ username: "andydrew313@gmail.com", password: "Anda31399pand@" })} variant="outlined" className={classes.authButton}>Sign In</Button>
+            <Button onClick={() => signOut()} variant="outlined" className={classes.authButton}>Sign Out</Button>
           </span>
         </Toolbar>
       </AppBar>

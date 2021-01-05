@@ -1,49 +1,37 @@
-import { GetServerSideProps } from 'next'
-import Amplify, { withSSRContext, Auth } from "aws-amplify";
+import React from 'react';
+import Amplify, { withSSRContext } from 'aws-amplify';
 
-import amplifyConfig from '../../lib/amp'
-import { Button } from '@material-ui/core';
-Amplify.configure({ ...amplifyConfig, ssr: true })
+import awsExports from '@/lib/amp'
+Amplify.configure({ ...awsExports, ssr: true })
 
-const AdminHome: React.FC = ({ ok }) => {
-  const showUser = async () => {
-    try {
-      const user = await Auth.currentAuthenticatedUser()
-      console.log("user", user)
-    } catch (err) {
-      console.log("current user err", err)
-    }
-  }
+const AdminHome: React.FC = (props) => {
 
   return (
     <div>
-      admin {ok ? "yes" : "no"}
-      <Button onClick={showUser}>show user</Button>
+      {JSON.stringify(props)}
     </div>
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { Auth } = withSSRContext(ctx)
+export const getServerSideProps = async ({ req }) => {
+  const { Auth } = withSSRContext({ req })
+
   try {
+    console.log(await Auth.currentSession())
     const user = await Auth.currentAuthenticatedUser()
-    console.log("user", user)
+    console.log("logged in!", user)
     return {
-      props: {
-        ok: true
-      }
+      props: user
     }
   } catch (err) {
-    console.log("auth", err)
+    console.log("err", err)
     return {
-      props: {
-        ok: false
+      redirect: {
+        permanent: false,
+        destination: "/"
       }
-      // redirect: {
-      //   permanent: false,
-      //   destination: "/",
-      // }
     }
   }
-}
+
+};
 export default AdminHome

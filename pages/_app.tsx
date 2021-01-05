@@ -8,10 +8,12 @@ import { getTheme } from '../theme/theme'
 
 import '../theme/global.css'
 
-import configureAmp from '../lib/amp'
-import Amplify from 'aws-amplify';
+import Amplify from 'aws-amplify'
+import awsConfig from '@/lib/amp'
 
-Amplify.configure({ ...configureAmp, ssr: true })
+const config = Amplify.configure({ ...awsConfig, ssr: true });
+
+console.log("configgs", config)
 
 function MyApp({ Component, pageProps }) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
