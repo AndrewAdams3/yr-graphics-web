@@ -1,25 +1,25 @@
-import { Paper, makeStyles } from '@material-ui/core'
+import { Box } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { IProduct } from '../../types'
-
-const useStyles = makeStyles((theme) => ({
-  product: {
-    height: "15rem",
-    textAlign: 'center',
-    border: "1px solid " + theme.palette.secondary.light,
-    borderRadius: theme.shape.borderRadius,
-    overflow: "hidden",
-    cursor: "pointer"
-  },
-}))
 
 
 interface IProps {
   product: IProduct
 }
+
+// const styles = {
+//   product: {
+//     height: "15rem",
+//     width: '10rem',
+//     textAlign: "center",
+//     border: '1px solid grey'
+//     borderRadius: "1rem",
+//     overflow: "hidden";
+//     cursor: pointer;
+//   }
+// }
 const Product: React.FC<IProps> = ({ product: { name, images } }) => {
-  const classes = useStyles()
   const [imagePreview, setImagePreview] = useState(images[0] || "/images/blank-shirt.png")
 
   const toggleImage = () => {
@@ -29,10 +29,15 @@ const Product: React.FC<IProps> = ({ product: { name, images } }) => {
       setImagePreview(images[0])
   }
 
-  return (
-    <Paper
-      elevation={2} variant="outlined"
-      className={classes.product}
+  return (<>
+    <Box
+      h="13rem"
+      w="12rem"
+      textAlign="center"
+      bgColor="white.500"
+      overflow="hidden"
+      cursor="pointer"
+      position="relative"
       onMouseEnter={toggleImage}
       onMouseLeave={toggleImage}
     >
@@ -40,9 +45,10 @@ const Product: React.FC<IProps> = ({ product: { name, images } }) => {
         src={imagePreview}
         alt="shirt"
         layout="fill"
-        objectFit="contain" />
-    </Paper>
-  )
+        objectFit="contain"
+      />
+    </Box>
+  </>)
 }
 
 export default Product

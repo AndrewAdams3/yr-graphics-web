@@ -1,39 +1,30 @@
 import { useEffect, useState } from 'react'
-import { ThemeProvider, useMediaQuery } from '@material-ui/core'
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { ChakraProvider } from "@chakra-ui/react"
+import { Provider as AuthProvider } from "next-auth/client"
 
 import Layout from '../components/layout'
 import { LayoutProvider } from '../lib/LayoutContext'
-import { getTheme } from '../theme/theme'
 
-import '../theme/global.css'
-
-import Amplify from 'aws-amplify'
-import awsConfig from '@/lib/amp'
-
-const config = Amplify.configure({ ...awsConfig, ssr: true });
-
-console.log("configgs", config)
+import { useRouter } from 'next/router';
+import theme from '../theme/theme'
 
 function MyApp({ Component, pageProps }) {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [darkMode, setDarkMode] = useState(prefersDarkMode)
+  const router = useRouter()
 
   useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side')
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles)
-    }
-  }, [])
+    if (router.asPath.endsWith("#")) router.push(router.pathname); // google oauth hack
+  });
+
   return (
-    <ThemeProvider theme={getTheme(false)}>
-      <CssBaseline />
-      <LayoutProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </LayoutProvider>
-    </ThemeProvider>
+    <AuthProvider session={pageProps.session}>
+      <ChakraProvider resetCSS theme={theme}>
+        <LayoutProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </LayoutProvider>
+      </ChakraProvider>
+    </AuthProvider>
   )
 }
 

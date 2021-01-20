@@ -1,80 +1,42 @@
-import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import React from 'react';
 import { useRouter } from 'next/router'
-import Amplify from 'aws-amplify'
-import awsExports from '@/lib/amp'
+import { signIn, useSession, signOut } from 'next-auth/client'
+import { Button, Flex, Heading } from '@chakra-ui/react';
 
-import { signIn, signOut } from '@/lib/auth'
-Amplify.configure({ ...awsExports, ssr: true });
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  titleContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: "100%",
-    margin: "auto",
-    width: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: 'center'
-  },
-  title: {
-    fontWeight: "bold"
-  },
-  toolBar: {
-    display: 'flex',
-    justifyContent: "space-between"
-  },
-  leftButtons: {
-  },
-  rightButtons: {
-
-  },
-  authButton: {
-    borderColor: theme.palette.common.white,
-    marginLeft: ".5rem"
-  }
-}));
 
 export default function Header() {
-  const classes = useStyles();
   const router = useRouter()
+  const [session, loading] = useSession()
 
   const navigate = (path: string) => {
     router.push(path)
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar className={classes.toolBar}>
-          <div className={classes.leftButtons}>
-            <Button onClick={() => navigate("/shop")}>Shop</Button>
-            <Button onClick={() => navigate("/admin")}>Admin</Button>
-            <Button>About Us</Button>
-            <Button>Contact</Button>
-          </div>
-          <span className={classes.titleContainer}>
-            <Typography variant="h6" className={classes.title}>
-              EcoGraphicPrints
-            </Typography>
-          </span>
-          <span className={classes.rightButtons}>
-            <Button>Get Involved?</Button>
-            <Button onClick={() => signIn({ username: "andydrew313@gmail.com", password: "Anda31399pand@" })} variant="outlined" className={classes.authButton}>Sign In</Button>
-            <Button onClick={() => signOut()} variant="outlined" className={classes.authButton}>Sign Out</Button>
-          </span>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <Flex
+      as="nav"
+      align="center"
+      justify="space-between"
+      wrap="wrap"
+      w="100%"
+      p={5}
+      bg={"green.600"}
+      color={["white", "white", "primary.700", "primary.700"]}
+    >
+      <Button
+        onClick={() => navigate("/shop")}
+        colorScheme="white" variant="ghost">
+        Shop
+      </Button>
+      <Flex flexGrow={1} dir="column" justifyContent="center">
+        <Heading size={"lg"} color="white">EcoGraphicPrints</Heading>
+      </Flex>
+      {session ?
+        <Button onClick={() => signOut()}
+          variant="ghost" colorScheme="white">Sign Out</Button>
+        :
+        <Button onClick={() => signIn("google")}
+          variant="ghost" colorScheme="white">Sign In</Button>}
+    </Flex>
   );
 }

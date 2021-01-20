@@ -1,48 +1,15 @@
 import { useRef } from 'react'
-import { Box, Button, makeStyles, Typography, IconButton, Divider, Avatar, useMediaQuery } from "@material-ui/core";
+import { Box, Button, IconButton, Avatar, Heading, Flex, Divider } from "@chakra-ui/react";
+import { MdNavigateNext } from '@react-icons/all-files/md/MdNavigateNext'
+import { MdNavigateBefore } from '@react-icons/all-files/md/MdNavigateBefore'
+
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 
 import { IProduct } from '../../types/index'
 import Product from './Product';
-import { useTheme } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    width: "100%",
-    padding: theme.spacing(1),
-    margin: theme.spacing(2, 0)
-  },
-  productsContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    overflow: "hidden",
-    position: "relative",
-    height: "15rem",
-    marginTop: theme.spacing(1)
-  },
-  products: {
-    position: "absolute",
-    width: "90%",
-    top: 0, bottom: 0, left: 0, right: 0,
-    margin: "auto",
-  },
-  itemContainer: {
-    padding: "1rem"
-  },
-  arrowButton: {
-    backgroundColor: "#7b5e573d",
-    border: "1px solid " + theme.palette.secondary.light,
-    marginTop: "auto",
-    marginBottom: "auto",
-    zIndex: 100
-  },
-  title: {
-    fontWeight: "bold"
-  }
-}))
+import styles from "./ProductRow.module.css"
+import styled from '@emotion/styled';
 
 interface ProductList {
   title: string
@@ -69,12 +36,17 @@ const responsive = {
   }
 };
 
+const ArrowIcon = styled(IconButton)(props => ({
+  borderRadius: "10rem",
+  border: "1px solid grey",
+  margin: "auto 0",
+  backgroundColor: "#7b5e573d",
+  zIndex: 100
+}))
+
 const ProductRow: React.FC<ProductList> = ({ title, products, avatar, shopAllNav }) => {
   const carouselRef = useRef<Carousel>();
-  const classes = useStyles()
-  const theme = useTheme()
-  const isBig = useMediaQuery(theme.breakpoints.up('sm'));
-
+  const isBig = true;
   const scrollRight = () => {
     carouselRef.current.next(carouselRef.current.state.slidesToShow)
   }
@@ -82,18 +54,27 @@ const ProductRow: React.FC<ProductList> = ({ title, products, avatar, shopAllNav
     carouselRef.current.previous(carouselRef.current.state.slidesToShow)
   }
 
-  return (
-    <Box className={classes.container}>
-      <Box display="flex" flexDirection="row" width="100%">
+  return (<>
+    <Flex direction="column" padding=".5rem">
+      <Box display="flex" flexDirection="row" alignItems="center" width="100%" m=".25rem">
         <Avatar style={{ backgroundColor: "green" }} src={avatar} alt="cause" />
-        <Divider orientation="vertical" variant="middle" flexItem style={{ backgroundColor: "black" }} />
-        <Typography className={classes.title} variant="h6">{title}</Typography>
-        <Button onClick={shopAllNav} style={{ marginLeft: "1rem" }}>Shop All</Button>
+        <Divider orientation="vertical" margin="0 .5rem" />
+        <Heading variant="h6">{title}</Heading>
+        <Button onClick={shopAllNav} style={{ marginLeft: "1rem" }} variant="ghost" colorScheme="whiteAlpha">Shop All</Button>
       </Box>
-      <Box className={classes.productsContainer}>
-        {isBig && <IconButton className={classes.arrowButton} onClick={scrollLeft}>
-          <NavigateBeforeIcon />
-        </IconButton>}
+      <Box className={styles["products-container"]}>
+        {isBig &&
+          <ArrowIcon
+            icon={<MdNavigateBefore />}
+            borderRadius="10rem"
+            margin="auto 0"
+            backgroundColor="white !important"
+            border="none !important"
+            zIndex={100}
+            aria-label="Next-Button"
+            size="lg"
+            onClick={scrollLeft} />
+        }
         <Carousel
           ref={carouselRef}
           partialVisbile={false}
@@ -103,24 +84,33 @@ const ProductRow: React.FC<ProductList> = ({ title, products, avatar, shopAllNav
           draggable={!isBig} // ismobile?
           showDots={false}
           responsive={responsive}
-          ssr // means to render carousel on server-side.
+          ssr
           infinite={false}
-          containerClass={classes.products}
+          containerClass={styles.products}
           removeArrowOnDeviceType={["tablet", "mobile"]}
           // deviceType={this.props.deviceType} // ismobile
-          itemClass={classes.itemContainer}
+          itemClass={styles["item-container"]}
           renderButtonGroupOutside
         >
           {products && products.map((product) => {
             return (<Product product={product} key={product.product_id} />)
           })}
         </Carousel>
-        {isBig && <IconButton className={classes.arrowButton} onClick={scrollRight}>
-          <NavigateNextIcon />
-        </IconButton>}
+        {isBig &&
+          <ArrowIcon
+            icon={<MdNavigateNext />}
+            borderRadius="10rem"
+            border="none !important"
+            margin="auto 0"
+            backgroundColor="white !important"
+            zIndex={100}
+            aria-label="Next-Button"
+            size="lg"
+            onClick={scrollRight} />
+        }
       </Box>
-    </Box>
-  )
+    </Flex>
+  </>)
 }
 
 export default ProductRow

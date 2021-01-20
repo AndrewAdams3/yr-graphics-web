@@ -1,80 +1,43 @@
-import { createMuiTheme, PaletteColorOptions, ThemeOptions } from '@material-ui/core'
-
-const paletteColorsDark: {[key: string]: PaletteColorOptions} = {
-  primary: {
-    main: '#0f4c75'
+import { extendTheme } from "@chakra-ui/react"
+// 2. Extend the theme to include custom colors, fonts, etc
+const colors = {
+  brand: {
+    900: "#1a365d",
+    800: "#153e75",
+    700: "#2a69ac",
   },
-  secondary: {
-    main: '#0f4c75'
+  green: {
+    50: '#e2fbed',
+    100: '#c2ebd4',
+    200: '#9fddb9',
+    300: '#7ccf9e',
+    400: '#58c184',
+    500: '#3ea76a',
+    600: '#2e8251',
+    700: '#1f5d3a',
+    800: '#0f3921',
+    900: '#001506',
   },
-  error: {
-    main: '#ff0032'
+  brown: {
+    50: '#ffeee2',
+    100: '#f3d0bf',
+    200: '#e5b299',
+    300: '#d99473',
+    400: '#cd754c',
+    500: '#b35c32',
+    600: '#8c4726',
+    700: '#65321a',
+    800: '#3f1e0d',
+    900: '#1c0600',
+  },
+  white: "white",
+  whiteAlpha: {
+    100: "white",
+    200: "white",
+    300: "white",
+    400: "white",
+    500: "white",
+    600: "white"
   }
 }
-
-const otherColorsDark = {
-  text: {
-    primary: "",
-    secondary: "",
-    disabled: "",
-    hint: ""
-  },
-  background: {
-    default: "",
-    paper:""
-  }
-}
-
-const paletteColorsLight: {[key: string]: PaletteColorOptions} = {
-  primary: {
-    main: '#2e7d32',
-    light: "#60ad5e",
-    dark: "#005005",
-    contrastText: "#ffffff"
-  },
-  secondary: {
-    main: '#4e342e',
-    light: "#7b5e57",
-    dark: "#260e04",
-    contrastText: "#ffffff"
-  },
-  error: {
-    main: '#ff0032'
-  }
-}
-
-
-const otherColorsLight = {
-  text: {
-    primary: "#f",
-    secondary: "#0",
-    disabled: "#9",
-    hint: "0d0d0d"
-  },
-  background: {
-    default: "#f0fff3",
-    paper:"#f0fff3"
-  }
-}
-const options = (dark: boolean): ThemeOptions => {
-  const paletteColors = dark ? paletteColorsDark : paletteColorsLight
-  const otherColors = dark ? otherColorsDark : otherColorsLight
-  return {
-    palette: {
-      type: dark ? 'dark' : 'light',
-      primary: paletteColors.primary,
-      secondary: paletteColors.secondary,
-      error: paletteColors.error,
-      ...otherColors
-    // ...
-    },
-    overrides: {
-      MuiButton: {
-        root: {
-          textTransform: "none"
-        }
-      }
-    }
-  }
-}
-export const getTheme = (prefersDark) => createMuiTheme(options(prefersDark))
+export default extendTheme({ colors })

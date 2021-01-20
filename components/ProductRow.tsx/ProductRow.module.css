@@ -1,0 +1,27 @@
+.item-container {
+  padding: 1rem;
+}
+
+.products {
+  position: absolute;
+  width: 90%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.container {
+  width: 100%;
+  padding: 1rem;
+  margin: 0 0.4rem;
+}
+.products-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  height: 15rem;
+  padding: 0.4rem;
+}
